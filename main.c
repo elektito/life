@@ -152,6 +152,7 @@ step(void)
         int scrh = GetScreenHeight();
         int same_color_close = 0;
         int close = 0;
+        float delta = GetFrameTime();
 
         for (int i = 0; i < nparticles; i++) {
                 particles[i].fx = 0;
@@ -188,8 +189,8 @@ step(void)
                 // apply all of the of forces at the same time, but that
                 // would quickly result in (mostly) unmoving stable
                 // structures which were not very interesting.
-                particles[i].vx += particles[i].fx * 0.08;
-                particles[i].vy += particles[i].fy * 0.08;
+                particles[i].vx += particles[i].fx * delta * 4.8;
+                particles[i].vy += particles[i].fy * delta * 4.8;
 
                 float speed = sqrtf(
                         particles[i].vx * particles[i].vx +
@@ -221,8 +222,8 @@ step(void)
                         particles[i].y = scrh - 1;
                 }
 
-                particles[i].x += particles[i].vx;
-                particles[i].y += particles[i].vy;
+                particles[i].x += particles[i].vx * delta * 60;
+                particles[i].y += particles[i].vy * delta * 60;
 
                 if (crowd_rules_enabled) {
                         if (same_color_close > 100 && rnd() < 0.1)
