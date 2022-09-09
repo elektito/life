@@ -22,6 +22,7 @@ all: life
 %.o: %.c $(HEADERS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
+life: CFLAGS += -g -Og
 life: $(OBJECTS) raylib
 	$(CC) $(OBJECTS) $(LDFLAGS) $(LIBS) -o $@
 
@@ -29,6 +30,10 @@ raylib: lib/raylib/src
 	$(MAKE) -C lib/raylib/src
 
 web: $(WEB_OUTPUT_DIR)/life.html
+
+release: CFLAGS += -O3
+release: LDFLAGS += -Wl,-s
+release: life
 
 web-zip: web
 	mv $(WEB_OUTPUT_DIR)/life.html $(WEB_OUTPUT_DIR)/index.html
