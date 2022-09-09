@@ -1,0 +1,22 @@
+# -*- mode: makefile; -*-
+
+RAYLIB_SRC_PATH ?= lib/raylib/src
+
+all: libraylib.a
+
+%.o: $(RAYLIB_SRC_PATH)/%.c
+	emcc -c $< -o $@ -Os -Wall -DPLATFORM_WEB -DGRAPHICS_API_OPENGL_ES2
+
+utils.o: $(RAYLIB_SRC_PATH)/utils.c
+	emcc -c $(RAYLIB_SRC_PATH)/utils.c -Os -Wall -DPLATFORM_WEB
+
+raudio.o: $(RAYLIB_SRC_PATH)/raudio.c
+	emcc -c $(RAYLIB_SRC_PATH)/raudio.c -Os -Wall -DPLATFORM_WEB
+
+libraylib.a: rcore.o rshapes.o rtextures.o rtext.o rmodels.o utils.o raudio.o $(RAYLIB_SRC_PATH)/raylib.h
+	emar rcs libraylib.a rcore.o rshapes.o rtextures.o rtext.o rmodels.o utils.o raudio.o
+
+clean:
+	rm -f libraylib.a *.o
+
+.PHONY: all clean
