@@ -38,7 +38,7 @@ EM_JS(void, offer_download, (const char *filename, const char *mime), {
 #define EMSCRIPTEN_KEEPALIVE
 #endif
 
-static bool gui_visible = false;
+static bool gui_visible = true;
 static bool should_close = false;
 static bool crowd_rules_enabled = false;
 
