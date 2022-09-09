@@ -60,8 +60,8 @@ struct Particle {
         float fy;
 };
 
-#define NPARTICLES 1750
-static struct Particle particles[NPARTICLES];
+static int nparticles = 1000;
+static struct Particle *particles = NULL;
 
 struct Rule {
         enum ParticleType type1;
@@ -89,7 +89,7 @@ void
 draw_screen(void)
 {
         ClearBackground(BLACK);
-        for (int i = 0; i < NPARTICLES; i++) {
+        for (int i = 0; i < nparticles; i++) {
                 Color color;
                 switch (particles[i].type) {
                 case P_RED:
@@ -153,15 +153,15 @@ step(void)
         int same_color_close = 0;
         int close = 0;
 
-        for (int i = 0; i < NPARTICLES; i++) {
+        for (int i = 0; i < nparticles; i++) {
                 particles[i].fx = 0;
                 particles[i].fy = 0;
         }
 
-        for (int i = 0; i < NPARTICLES; i++) {
+        for (int i = 0; i < nparticles; i++) {
                 same_color_close = 0;
                 close = 0;
-                for (int j = 0; j < NPARTICLES; j++) {
+                for (int j = 0; j < nparticles; j++) {
                         if (i == j)
                                 continue;
                         float dx = particles[i].x - particles[j].x;
@@ -264,9 +264,14 @@ load_file(uint8_t *buffer, size_t size) {
 void
 init_particles(void)
 {
+        if (particles)
+                free(particles);
+
+        particles = malloc(nparticles * sizeof(struct Particle));
+
         int scrw = GetScreenWidth();
         int scrh = GetScreenHeight();
-        for (int i = 0; i < NPARTICLES; i++) {
+        for (int i = 0; i < nparticles; i++) {
                 particles[i] = (struct Particle) {
                         .type = (int)(rnd() * 4) + 1,
                         .x = rnd() * scrw,
@@ -297,7 +302,20 @@ draw_gui()
         float max_value = 1.0;
         int n = 0;
         float x = 100.0;
-        float y = 100.0;
+        float y = 50.0;
+
+        int new_np = GuiComboBox((Rectangle){x, y, 120, 20},
+                                 "500 Particles;1000 Particles;"
+                                 "1500 Particles;2000 Particles;"
+                                 "2500 Particles;3000 Particles",
+                                 nparticles / 500 - 1);
+        new_np = new_np * 500 + 500;
+        if (new_np != nparticles) {
+                nparticles = new_np;
+                init_particles();
+        }
+        y += 25;
+
         for (int i = 0; i < 4; ++i) {
                 for (int j = i; j < 4; ++j) {
                         rules[n].updated = false;
@@ -455,6 +473,7 @@ main(int argc, char *argv[])
         #endif
 
         CloseWindow();
+        free(particles);
 
         return 0;
 }
