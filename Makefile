@@ -35,11 +35,12 @@ web-zip: web
 	zip -r web.zip $(WEB_OUTPUT_DIR)
 	mv $(WEB_OUTPUT_DIR)/index.html $(WEB_OUTPUT_DIR)/life.html
 
-$(WEB_OUTPUT_DIR)/life.html: main.c shell.html
+$(WEB_OUTPUT_DIR)/life.html: main.c assets/shell.html assets/fullscreen.png
 	mkdir -p $(WEB_BUILD_DIR)
 	. $(EMSDK_PATH)/emsdk_env.sh && $(MAKE) -C $(WEB_BUILD_DIR) -f ../lib/Makefile.raylib.web RAYLIB_SRC_PATH=../lib/raylib/src
 	mkdir -p $(WEB_OUTPUT_DIR)
-	. $(EMSDK_PATH)/emsdk_env.sh && emcc -o $(WEB_OUTPUT_DIR)/life.html main.c -Os -Wall -lraylib -I. -Ilib -Ilib/raylib/src -L$(WEB_BUILD_DIR) -s USE_GLFW=3 -DPLATFORM_WEB -s EXPORTED_RUNTIME_METHODS=[FS,ccall] --shell-file shell.html
+	. $(EMSDK_PATH)/emsdk_env.sh && emcc -o $(WEB_OUTPUT_DIR)/life.html main.c -Os -Wall -lraylib -I. -Ilib -Ilib/raylib/src -L$(WEB_BUILD_DIR) -s USE_GLFW=3 -DPLATFORM_WEB -s EXPORTED_RUNTIME_METHODS=[FS,ccall] --shell-file assets/shell.html
+	cp assets/fullscreen.png $(WEB_OUTPUT_DIR)
 
 clean:
 	-rm -f $(OBJECTS)
