@@ -30,6 +30,11 @@ raylib: lib/raylib/src
 
 web: $(WEB_OUTPUT_DIR)/life.html
 
+web-zip: web
+	mv $(WEB_OUTPUT_DIR)/life.html $(WEB_OUTPUT_DIR)/index.html
+	zip -r web.zip $(WEB_OUTPUT_DIR)
+	mv $(WEB_OUTPUT_DIR)/index.html $(WEB_OUTPUT_DIR)/life.html
+
 $(WEB_OUTPUT_DIR)/life.html: main.c shell.html
 	mkdir -p $(WEB_BUILD_DIR)
 	. $(EMSDK_PATH)/emsdk_env.sh && $(MAKE) -C $(WEB_BUILD_DIR) -f ../lib/Makefile.raylib.web RAYLIB_SRC_PATH=../lib/raylib/src
