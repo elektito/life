@@ -1,6 +1,6 @@
 CC = cc
 SAN_FLAGS= #-fsanitize=address -fsanitize-recover=address
-CFLAGS=-Ilib -Ilib/raylib/src -Og -fno-omit-frame-pointer -g $(SAN_FLAGS)
+CFLAGS=-isystem lib -isystem lib/raylib/src -Og -fno-omit-frame-pointer -g $(SAN_FLAGS) -std=c99 -Wall -Werror
 LDFLAGS=-Llib/raylib/src $(SAN_FLAGS)
 
 HEADERS =
