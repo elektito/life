@@ -191,10 +191,11 @@ step(void)
                 particles[i].vx += particles[i].fx * 0.08;
                 particles[i].vy += particles[i].fy * 0.08;
 
-                float speed =
+                float speed = sqrtf(
                         particles[i].vx * particles[i].vx +
-                        particles[i].vy * particles[i].vy;
-                const float max_speed = 128;
+                        particles[i].vy * particles[i].vy
+                );
+                const float max_speed = 8;
                 if (speed > max_speed)
                 {
                         particles[i].vx /= speed;
