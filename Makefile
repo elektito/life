@@ -26,7 +26,7 @@ life: $(OBJECTS) raylib
 	$(CC) $(OBJECTS) $(LDFLAGS) $(LIBS) -o $@
 
 raylib: lib/raylib/src
-	make -C lib/raylib/src
+	$(MAKE) -C lib/raylib/src
 
 web: $(WEB_OUTPUT_DIR)/life.html
 
@@ -43,6 +43,6 @@ clean:
 	-rm -rf $(WEB_OUTPUT_DIR)
 
 distclean: clean
-	-make -C lib/raylib/src
+	-make -C lib/raylib/src clean
 
 .PHONY: clean all
