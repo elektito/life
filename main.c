@@ -203,10 +203,6 @@ step(void)
                         particles[i].vy *= max_speed;
                 }
 
-                particles[i].x += particles[i].vx;
-                particles[i].y += particles[i].vy;
-
-
                 if (particles[i].x < 0) {
                         particles[i].vx *= -1;
                         particles[i].x = 0;
@@ -223,6 +219,9 @@ step(void)
                         particles[i].vy *= -1;
                         particles[i].y = scrh - 1;
                 }
+
+                particles[i].x += particles[i].vx;
+                particles[i].y += particles[i].vy;
 
                 if (crowd_rules_enabled) {
                         if (same_color_close > 100 && rnd() < 0.1)
