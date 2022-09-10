@@ -60,6 +60,8 @@ struct Particle {
         float fy;
 };
 
+static float edge_repulsion = 200;
+static float edge_size = 20;
 static int nparticles = 1000;
 static struct Particle *particles = NULL;
 
@@ -185,6 +187,19 @@ step(void)
                         }
                 }
 
+                if (particles[i].x < edge_size) {
+                        particles[i].fx += edge_repulsion;
+                }
+                if (particles[i].x > scrw - edge_size) {
+                        particles[i].fx -= edge_repulsion;
+                }
+                if (particles[i].y < edge_size) {
+                        particles[i].fy += edge_repulsion;
+                }
+                if (particles[i].y > scrh - edge_size) {
+                        particles[i].fy -= edge_repulsion;
+                }
+
                 // I tried doing this after the current loop, that is,
                 // apply all of the of forces at the same time, but that
                 // would quickly result in (mostly) unmoving stable
@@ -276,8 +291,8 @@ init_particles(void)
         for (int i = 0; i < nparticles; i++) {
                 particles[i] = (struct Particle) {
                         .type = (int)(rnd() * 4) + 1,
-                        .x = rnd() * scrw,
-                        .y = rnd() * scrh,
+                        .x = edge_size + rnd() * (scrw - 2 * edge_size),
+                        .y = edge_size + rnd() * (scrh - 2 * edge_size),
                         .vx = 0.0,
                         .vy = 0.0,
                 };
